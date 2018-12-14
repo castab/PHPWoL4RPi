@@ -4,32 +4,53 @@
     <p class="lead"></p>
   </div>
 </div>
+
 <div class="container">
     <div class="row">
         <div ng-repeat="host in vm.hosts" class="col-12 col-sm-12 col-md-6 col-xl-4" style="margin-bottom:20px;">
-        <div class="card">
-            <div class="card-body" style="padding-bottom:0px;">
-                <div class="d-flex flex-row" style="margin-bottom:5px">
-                    <i class="fa fa-desktop" style="font-size:30px;"></i>
-                    <h5 ng-bind="host.hostName" style="margin-left:10px;"></h5>
-                    <div class="ml-auto">
-                        <div ng-if="host.isNetworkStatusLoading" class="lds-dual-ring"></div>
-                        <div ng-if="host.isActive" class="alert alert-success" role="alert" style="max-height:30px;padding:0 25px 0 25px;">Active</div>
-                        <div ng-if="host.isNotActive" class="alert alert-danger" role="alert" style="max-height:30px;padding:0 25px 0 25px;">Inactive</div>
+            <div class="card">
+                <div class="card-body" style="padding-bottom:0px;">
+                    <div class="d-flex flex-row" style="margin-bottom:5px" ng-cloak>
+                        <i class="{{host.icon}}" style="font-size:30px;"></i>
+                        <h5 ng-bind="host.hostName" style="margin-left:10px;"></h5>
+                        <div class="ml-auto" style="top-margin:8px;">
+                            <div ng-if="host.isNetworkStatusLoading" class="lds-dual-ring"></div>
+                            <div ng-if="host.isActive" class="alert alert-success" role="alert" style="max-height:30px;padding:0 25px 0 25px;">Active</div>
+                            <div ng-if="host.isNotActive" class="alert alert-danger" role="alert" style="max-height:30px;padding:0 25px 0 25px;">Inactive</div>
+                        </div> 
                     </div>
-                    
+                    <div ng-if="host.deviceType == 'workstation';">
+                        <div class="d-flex justify-content-end">
+                            <button type="button" ng-if="!host.alert" ng-click="vm.sendWake(host);" ng-disabled="host.alert" class="btn btn-primary btn-block" style="margin-bottom:20px;">
+                                Wake
+                            </button>
+                        </div>
+                        <div ng-if="host.alert;" class="d-flex alert-dismissible" ng-class="{'alert': true,'alert-success': host.alertSuccess, 'alert-danger': host.alertFailure}" role="alert" style="margin-top:0px;margin-bottom:20px;">
+                            <span ng-bind="host.alertMessage"></span>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close" ng-click="host.alert = false;">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div> 
+                    </div> 
                 </div>
-                <div class="d-flex justify-content-end">
-                    <button type="button" ng-click="vm.sendWake(host);" ng-disabled="host.alert" class="btn btn-primary btn-block" style="margin-bottom:20px;">Wake</a>
-                </div>
-                <div ng-if="host.alert;" class="d-flex alert-dismissible" ng-class="{'alert': true,'alert-success': host.alertSuccess, 'alert-danger': host.alertFailure}" role="alert" style="margin-top:0px;margin-bottom:20px;">
-                    <span ng-bind="host.alertMessage"></span>
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close" ng-click="host.alert = false;">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>   
             </div>
-        </div>
         </div>
     </div>
 </div>
+
+<div class="container-fluid" style="margin-bottom:45px;"></div>
+
+<nav class="container-fluid fixed-bottom" style="background-color: #3c3c3c;padding-top:5px;padding-bottom:5px;">
+    <div class="row align-items-center justify-content-center">
+        <div class="btn-group" role="group" aria-label="Basic example">
+            <button ng-click="vm.sendWakeAll();" ng-disabled="vm.wakeAllLoading || vm.checkAlertsForWake();" type="button" class="btn btn-secondary" style="min-width:175px;">
+            <span ng-if="!vm.wakeAllLoading">Wake All</span>
+            <div ng-if="vm.wakeAllLoading"; class="lds-dual-ring"></div>
+            </button>
+            <button ng-click="vm.refreshAllStatus();" ng-disabled="vm.refreshAllStatusLoading;" type="button" class="btn btn-secondary" style="min-width:175px;">
+                <span ng-if="!vm.refreshAllStatusLoading;">Refresh All</span>
+                <div ng-if="vm.refreshAllStatusLoading;" class="lds-dual-ring"></div>
+            </button>
+        </div>
+    </div>
+</nav>
