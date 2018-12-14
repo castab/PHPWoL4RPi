@@ -1,0 +1,35 @@
+<div class="jumbotron jumbotron-fluid">
+  <div class="container">
+    <h1 class="display-4">Wake On LAN Service</h1>
+    <p class="lead"></p>
+  </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div ng-repeat="host in vm.hosts" class="col-12 col-sm-12 col-md-6 col-xl-4" style="margin-bottom:20px;">
+        <div class="card">
+            <div class="card-body" style="padding-bottom:0px;">
+                <div class="d-flex flex-row" style="margin-bottom:5px">
+                    <i class="fa fa-desktop" style="font-size:30px;"></i>
+                    <h5 ng-bind="host.hostName" style="margin-left:10px;"></h5>
+                    <div class="ml-auto">
+                        <div ng-if="host.isNetworkStatusLoading" class="lds-dual-ring"></div>
+                        <div ng-if="host.isActive" class="alert alert-success" role="alert" style="max-height:30px;padding:0 25px 0 25px;">Active</div>
+                        <div ng-if="host.isNotActive" class="alert alert-danger" role="alert" style="max-height:30px;padding:0 25px 0 25px;">Inactive</div>
+                    </div>
+                    
+                </div>
+                <div class="d-flex justify-content-end">
+                    <button type="button" ng-click="vm.sendWake(host);" ng-disabled="host.alert" class="btn btn-primary btn-block" style="margin-bottom:20px;">Wake</a>
+                </div>
+                <div ng-if="host.alert;" class="d-flex alert-dismissible" ng-class="{'alert': true,'alert-success': host.alertSuccess, 'alert-danger': host.alertFailure}" role="alert" style="margin-top:0px;margin-bottom:20px;">
+                    <span ng-bind="host.alertMessage"></span>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close" ng-click="host.alert = false;">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>   
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
